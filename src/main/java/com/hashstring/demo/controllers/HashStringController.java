@@ -21,7 +21,7 @@ public class HashStringController {
     @Autowired
     private HashStringService hashStringService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @Operation(summary = "Generate hash", description = "Generates a hash of the provided string input using the currently selected algorithm.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully generated hash"),
