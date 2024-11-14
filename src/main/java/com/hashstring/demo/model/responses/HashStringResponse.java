@@ -1,30 +1,30 @@
 package com.hashstring.demo.model.responses;
 
 public class HashStringResponse {
-    private String inputString;
-    private String hashOfString;
+    private String input;
+    private String hashOfInput;
     private String hashAlgorithm;
 
-    public HashStringResponse(String inputString, String hashOfString, String hashAlgorithm) {
-        this.inputString = inputString;
-        this.hashOfString = hashOfString;
+    public HashStringResponse(String input, String hashOfString, String hashAlgorithm) {
+        this.input = input;
+        this.hashOfInput = hashOfString;
         this.hashAlgorithm = hashAlgorithm;
     }
 
-    public String getInputString() {
-        return inputString;
+    public String getInput() {
+        return input;
     }
 
-    public void setInputString(String inputString) {
-        this.inputString = inputString;
+    public void setInput(String input) {
+        this.input = input;
     }
 
-    public String getHashOfString() {
-        return hashOfString;
+    public String getHashOfInput() {
+        return hashOfInput;
     }
 
-    public void setHashOfString(String hashOfString) {
-        this.hashOfString = hashOfString;
+    public void setHashOfInput(String hashOfInput) {
+        this.hashOfInput = hashOfInput;
     }
 
     public String getHashAlgorithm() {
