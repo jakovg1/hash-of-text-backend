@@ -1,6 +1,6 @@
-package com.hashstring.services;
+package com.hashstring.service;
 
-import com.hashstring.exceptions.NoSuchHashAlgorithmException;
+import com.hashstring.exception.NoSuchHashAlgorithmException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

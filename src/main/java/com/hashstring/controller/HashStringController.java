@@ -1,9 +1,9 @@
-package com.hashstring.controllers;
+package com.hashstring.controller;
 
-import com.hashstring.exceptions.NoSuchHashAlgorithmException;
-import com.hashstring.model.responses.HashStringResponse;
-import com.hashstring.model.responses.SupportedAlgorithmsResponse;
-import com.hashstring.services.HashStringService;
+import com.hashstring.exception.NoSuchHashAlgorithmException;
+import com.hashstring.model.response.HashStringResponse;
+import com.hashstring.model.response.SupportedAlgorithmsResponse;
+import com.hashstring.service.HashStringService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

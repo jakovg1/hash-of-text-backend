@@ -1,9 +1,9 @@
-package com.hashstring.controllers;
+package com.hashstring.controller;
 
 
-import com.hashstring.model.responses.HashStringResponse;
-import com.hashstring.model.responses.SupportedAlgorithmsResponse;
-import com.hashstring.services.HashStringService;
+import com.hashstring.model.response.HashStringResponse;
+import com.hashstring.model.response.SupportedAlgorithmsResponse;
+import com.hashstring.service.HashStringService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;

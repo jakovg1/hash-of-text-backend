@@ -1,4 +1,4 @@
-package com.hashstring.exceptions;
+package com.hashstring.exception;
 
 public class NoSuchHashAlgorithmException extends RuntimeException{
     public NoSuchHashAlgorithmException(String algorithm) {

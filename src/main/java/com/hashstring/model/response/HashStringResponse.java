@@ -1,4 +1,4 @@
-package com.hashstring.model.responses;
+package com.hashstring.model.response;
 
 public class HashStringResponse {
     private String input;
