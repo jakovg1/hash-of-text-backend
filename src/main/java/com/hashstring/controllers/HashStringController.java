@@ -1,15 +1,14 @@
-package com.hashstring.demo.controllers;
+package com.hashstring.controllers;
 
-import com.hashstring.demo.exceptions.NoSuchHashAlgorithmException;
-import com.hashstring.demo.model.responses.HashStringResponse;
-import com.hashstring.demo.model.responses.SupportedAlgorithmsResponse;
-import com.hashstring.demo.services.HashStringService;
+import com.hashstring.exceptions.NoSuchHashAlgorithmException;
+import com.hashstring.model.responses.HashStringResponse;
+import com.hashstring.model.responses.SupportedAlgorithmsResponse;
+import com.hashstring.services.HashStringService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

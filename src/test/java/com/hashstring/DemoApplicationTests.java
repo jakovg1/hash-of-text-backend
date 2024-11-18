@@ -1,4 +1,4 @@
-package com.hashstring.demo;
+package com.hashstring;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

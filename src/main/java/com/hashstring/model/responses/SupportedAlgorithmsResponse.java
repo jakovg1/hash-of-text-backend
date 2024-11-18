@@ -1,4 +1,4 @@
-package com.hashstring.demo.model.responses;
+package com.hashstring.model.responses;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.hashstring.demo;
+package com.hashstring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

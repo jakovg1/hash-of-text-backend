@@ -1,8 +1,8 @@
-package com.hashstring.demo.services;
+package com.hashstring.services;
 
-import com.hashstring.demo.exceptions.NoSuchHashAlgorithmException;
-import com.hashstring.demo.model.responses.HashStringResponse;
-import com.hashstring.demo.model.responses.SupportedAlgorithmsResponse;
+import com.hashstring.exceptions.NoSuchHashAlgorithmException;
+import com.hashstring.model.responses.HashStringResponse;
+import com.hashstring.model.responses.SupportedAlgorithmsResponse;
 import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 

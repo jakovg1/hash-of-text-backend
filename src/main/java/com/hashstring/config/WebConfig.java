@@ -1,4 +1,4 @@
-package com.hashstring.demo.config;
+package com.hashstring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
