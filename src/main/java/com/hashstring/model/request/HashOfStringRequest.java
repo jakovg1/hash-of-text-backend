@@ -6,6 +6,8 @@ public class HashOfStringRequest {
     @NotBlank(message = "Input must not be empty")
     private String input;
 
+    public HashOfStringRequest() {}
+
     public HashOfStringRequest(String inputString) {
         this.input = inputString;
     }
