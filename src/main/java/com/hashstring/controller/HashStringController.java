@@ -33,7 +33,7 @@ public class HashStringController {
             @ApiResponse(responseCode = "400", description = "Invalid input or empty string")
     })
     public ResponseEntity<HashOfStringResponse> getHashOfString(@RequestBody @Valid HashOfStringRequest request) {
-        HashOfStringResponse response = this.hashStringService.getHashOfString(request.getInputString());
+        HashOfStringResponse response = this.hashStringService.getHashOfString(request.getInput());
         return ResponseEntity.ok(response);
     }
 
