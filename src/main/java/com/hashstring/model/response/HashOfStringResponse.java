@@ -1,11 +1,11 @@
 package com.hashstring.model.response;
 
-public class HashStringResponse {
+public class HashOfStringResponse {
     private String input;
     private String hashOfInput;
     private String hashAlgorithm;
 
-    public HashStringResponse(String input, String hashOfString, String hashAlgorithm) {
+    public HashOfStringResponse(String input, String hashOfString, String hashAlgorithm) {
         this.input = input;
         this.hashOfInput = hashOfString;
         this.hashAlgorithm = hashAlgorithm;

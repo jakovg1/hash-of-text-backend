@@ -1,28 +1,41 @@
 package com.hashstring.service;
 
+import com.hashstring.entity.HashAlgorithm;
 import com.hashstring.entity.HashLog;
 import com.hashstring.exception.NoSuchHashAlgorithmException;
-import com.hashstring.model.response.HashStringResponse;
+import com.hashstring.model.response.HashOfStringResponse;
 import com.hashstring.model.response.SupportedAlgorithmsResponse;
 import com.hashstring.repository.HashAlgorithmRepository;
 import com.hashstring.repository.HashLogRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.security.MessageDigest;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class HashStringService {
-    private final List<String> supportedHashAlgorithms = List.of("MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512", "RIPEMD160");
-    private String hashAlgorithm = "MD5";
+    private List<String> supportedHashAlgorithms;
+    private String hashAlgorithm;
 
     @Autowired
     private HashAlgorithmRepository hashAlgorithmRepository;
 
     @Autowired
     private HashLogRepository hashLogRepository;
+
+    @PostConstruct
+    private void loadSupportedHashAlgorithms() {
+        this.supportedHashAlgorithms = new ArrayList<>();
+        List<HashAlgorithm> supportedHashAlgorithmEntities = hashAlgorithmRepository.findAll();
+        for (HashAlgorithm hashAlgorithmEntity : supportedHashAlgorithmEntities) {
+            this.supportedHashAlgorithms.add(hashAlgorithmEntity.getName());
+        }
+        this.hashAlgorithm = this.supportedHashAlgorithms.getFirst();
+    }
 
     public void setHashAlgorithm(String algorithm) {
         algorithm = algorithm.trim();
@@ -36,11 +49,11 @@ public class HashStringService {
         return this.hashAlgorithm;
     }
 
-    public SupportedAlgorithmsResponse getSupportedHashAlgorithms(){
-        return new SupportedAlgorithmsResponse(this.supportedHashAlgorithms);
+    public List<String> getSupportedAlgorithms(){
+        return this.supportedHashAlgorithms;
     }
 
-    public HashStringResponse getHashOfString(String inputString){
+    public HashOfStringResponse getHashOfString(String inputString){
         String hashedString;
         try {
             MessageDigest md = MessageDigest.getInstance(this.hashAlgorithm);
@@ -59,8 +72,8 @@ public class HashStringService {
             hashLog.setAlgorithmUsed(hashAlgorithm);
             hashLogRepository.save(hashLog);
 
-        } catch (NoSuchAlgorithmException e) { throw new NoSuchHashAlgorithmException(this.hashAlgorithm);}
-        return new HashStringResponse(inputString, hashedString, this.hashAlgorithm);
+        } catch (NoSuchAlgorithmException e) { throw new NoSuchHashAlgorithmException(hashAlgorithm);}
+        return new HashOfStringResponse(inputString, hashedString, hashAlgorithm);
     }
 
 

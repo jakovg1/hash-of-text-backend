@@ -1,71 +1,79 @@
 package com.hashstring.controller;
 
 import com.hashstring.exception.NoSuchHashAlgorithmException;
-import com.hashstring.model.response.HashStringResponse;
+import com.hashstring.model.request.HashAlgorithmRequest;
+import com.hashstring.model.request.HashOfStringRequest;
+import com.hashstring.model.response.HashAlgorithmResponse;
+import com.hashstring.model.response.HashOfStringResponse;
 import com.hashstring.model.response.SupportedAlgorithmsResponse;
 import com.hashstring.service.HashStringService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/hash")
+@RequestMapping("/hash-string/")
 @Tag(name = "Hash API", description = "API for generating hashes and managing hash algorithms")
 public class HashStringController {
 
     @Autowired
     private HashStringService hashStringService;
 
-    @PostMapping("")
-    @Operation(summary = "Generate hash", description = "Generates a hash of the provided string input using the currently selected algorithm.")
+    @PostMapping("/hash")
+    @Operation(summary = "Generate hash of input string", description = "Generates a hash of the input string using the currently selected algorithm.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully generated hash"),
             @ApiResponse(responseCode = "400", description = "Invalid input or empty string")
     })
-    public ResponseEntity<HashStringResponse> getHash(@RequestBody String input) {
-        if (input == null || input.isEmpty()) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        HashStringResponse response = this.hashStringService.getHashOfString(input);
+    public ResponseEntity<HashOfStringResponse> getHashOfString(@RequestBody @Valid HashOfStringRequest request) {
+        HashOfStringResponse response = this.hashStringService.getHashOfString(request.getInputString());
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/setAlgorithm")
+    @PostMapping("/algorithm")
     @Operation(summary = "Set hash algorithm", description = "Sets the hash algorithm to be used for future hash generation. Supported algorithms include MD5, SHA-1, SHA-256, etc.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Algorithm set successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid algorithm or unsupported algorithm specified")
+            @ApiResponse(responseCode = "400", description = "Invalid or unsupported algorithm")
     })
-    public ResponseEntity<String> setHashAlgorithm(@RequestBody String algorithm) {
+    public ResponseEntity<HashAlgorithmResponse> setHashAlgorithm(@RequestBody @Valid HashAlgorithmRequest request) {
+        String algorithm = request.getAlgorithm();
         try {
             this.hashStringService.setHashAlgorithm(algorithm);
-            return ResponseEntity.ok("Algorithm set to: " + algorithm);
+            return ResponseEntity.ok().build();
         } catch (NoSuchHashAlgorithmException e) {
-            return ResponseEntity.badRequest().body("Invalid algorithm or algorithm not supported: " + algorithm);
+            HashAlgorithmResponse response = new HashAlgorithmResponse(algorithm);
+            response.setMessage("Invalid or unsupported algorithm: " + algorithm);
+            return ResponseEntity.badRequest().body(response);
         }
     }
 
-    @GetMapping("/getAlgorithm")
-    @Operation(summary = "Get current hash algorithm", description = "Retrieves the name of the currently selected hash algorithm.")
+    @GetMapping("/algorithm")
+    @Operation(summary = "Get hash algorithm", description = "Retrieves the name of the currently selected hash algorithm.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved current algorithm")
     })
-    public ResponseEntity<String> getHashAlgorithm() {
+    public ResponseEntity<HashAlgorithmResponse> getHashAlgorithm() {
         String hashAlgorithm = this.hashStringService.getHashAlgorithm();
-        return ResponseEntity.ok(hashAlgorithm);
+        HashAlgorithmResponse response = new HashAlgorithmResponse(hashAlgorithm);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/supportedAlgorithms")
-    @Operation(summary = "Get supported algorithms", description = "Lists all supported hash algorithms that can be used for hash generation.")
+    @GetMapping("/algorithms")
+    @Operation(summary = "Get supported hash algorithms", description = "Lists all supported hash algorithms that can be used for hash generation.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved supported algorithms")
     })
     public ResponseEntity<SupportedAlgorithmsResponse> getSupportedHashAlgorithms() {
-        SupportedAlgorithmsResponse response = this.hashStringService.getSupportedHashAlgorithms();
+        List<String> supportedAlgorithms = this.hashStringService.getSupportedAlgorithms();
+        SupportedAlgorithmsResponse response = SupportedAlgorithmsResponse.fromStrings(supportedAlgorithms);
         return ResponseEntity.ok(response);
     }
 }

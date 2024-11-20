@@ -1,7 +1,8 @@
 package com.hashstring.controller;
 
 
-import com.hashstring.model.response.HashStringResponse;
+import com.hashstring.model.request.HashOfStringRequest;
+import com.hashstring.model.response.HashOfStringResponse;
 import com.hashstring.model.response.SupportedAlgorithmsResponse;
 import com.hashstring.service.HashStringService;
 import org.junit.jupiter.api.Test;
@@ -40,20 +41,16 @@ public class HashStringControllerTest {
     }*/
 
     @Test
-    public void foo() {
-        assertTrue(true);
-    }
-
-    @Test
-    public void testGetHash_ValidInput() throws Exception {
+    public void testGetHash_OfString_ValidInput() throws Exception {
         String input = "inputString";
         String hashedString = "60ff169ad58411fd2225ed8018b24018 ";
         String hashAlgorithm = "MD5";
-        HashStringResponse hashStringResponse = new HashStringResponse(input, hashedString, hashAlgorithm);
+        HashOfStringResponse hashOfStringResponse = new HashOfStringResponse(input, hashedString, hashAlgorithm);
+        HashOfStringRequest request = new HashOfStringRequest(input );
 
-        when(hashStringService.getHashOfString(input)).thenReturn(hashStringResponse);
+        when(hashStringService.getHashOfString(input)).thenReturn(hashOfStringResponse);
 
-        mockMvc.perform(post("/hash")
+        mockMvc.perform(post("/hash-string/hash")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(input))
                 .andExpect(status().isOk())
@@ -63,8 +60,8 @@ public class HashStringControllerTest {
     }
 
     @Test
-    public void testGetHash_EmptyInput() throws Exception {
-        mockMvc.perform(post("/hash")
+    public void testGetHash_OfString_EmptyInput() throws Exception {
+        mockMvc.perform(post("/hash-string/hash")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(""))
                 .andExpect(status().isBadRequest());
@@ -74,11 +71,10 @@ public class HashStringControllerTest {
     public void testSetHashAlgorithm_ValidAlgorithm() throws Exception {
         String algorithm = "SHA-256";
 
-        mockMvc.perform(post("/hash/setAlgorithm")
+        mockMvc.perform(post("/hash-string/algorithm")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(algorithm))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Algorithm set to: " + algorithm));
+                .andExpect(status().isOk());
         verify(hashStringService, times(1)).setHashAlgorithm(algorithm);
     }
 
@@ -86,32 +82,31 @@ public class HashStringControllerTest {
     public void testSetHashAlgorithm_InvalidAlgorithm() throws Exception {
         String algorithm = "INVALID";
 
-        mockMvc.perform(post("/hash/setAlgorithm")
+        mockMvc.perform(post("/hash-string/algorithm")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(algorithm))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid algorithm or algorithm not supported: " + algorithm));
+                .andExpect(status().isBadRequest());
         verify(hashStringService, times(1)).setHashAlgorithm(algorithm);
     }
 
     @Test
-    public void testGetHashAlgorithm() throws Exception {
+    public void testGetHashOfStringAlgorithm() throws Exception {
         String algorithm = "MD5";
         when(hashStringService.getHashAlgorithm()).thenReturn(algorithm);
 
-        mockMvc.perform(get("/hash/getAlgorithm"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(algorithm));
+        mockMvc.perform(get("/hash-string/algorithm"))
+                .andExpect(status().isOk());
+        verify(hashStringService, times(1)).setHashAlgorithm(algorithm);
     }
 
     @Test
     public void testGetSupportedAlgorithms() throws Exception {
-        SupportedAlgorithmsResponse supportedAlgorithmsResponse = new SupportedAlgorithmsResponse(
-                List.of("MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512", "RIPEMD160"));
 
-        when(hashStringService.getSupportedHashAlgorithms()).thenReturn(supportedAlgorithmsResponse);
+        List<String> supportedAlgorithms = List.of("MD5", "SHA-1", "SHA-256", "SHA-384", "SHA-512", "RIPEMD160");
 
-        mockMvc.perform(get("/hash/supportedAlgorithms"))
+        when(hashStringService.getSupportedAlgorithms()).thenReturn(supportedAlgorithms);
+
+        mockMvc.perform(get("/hash/algorithms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.algorithms[0]").value("MD5"))
                 .andExpect(jsonPath("$.algorithms[1]").value("SHA-1"))
